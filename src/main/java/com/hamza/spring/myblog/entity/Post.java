@@ -1,6 +1,5 @@
 package com.hamza.spring.myblog.entity;
 
-import com.hamza.spring.myblog.payload.CommentDto;
 import jakarta.persistence.*;
 import lombok.*;
 

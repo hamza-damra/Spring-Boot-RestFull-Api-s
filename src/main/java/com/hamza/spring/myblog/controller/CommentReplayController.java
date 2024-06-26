@@ -4,6 +4,7 @@ import com.hamza.spring.myblog.entity.Comment;
 import com.hamza.spring.myblog.payload.CommentDto;
 import com.hamza.spring.myblog.payload.CommentReplayDto;
 import com.hamza.spring.myblog.service.CommentReplayService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class CommentReplayController {
     }
 
     @PostMapping("/{comment_id}")
-    public ResponseEntity<Object> createCommentReplay(@PathVariable Long comment_id, @RequestBody CommentReplayDto commentReplayDto) {
+    public ResponseEntity<Object> createCommentReplay(@PathVariable Long comment_id,@Valid @RequestBody CommentReplayDto commentReplayDto) {
         if (commentReplayDto.getBody() == null) {
             return ResponseEntity.badRequest().body("Body field is required.");
         }

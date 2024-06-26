@@ -4,13 +4,14 @@ import com.hamza.spring.myblog.payload.CommentDto;
 import com.hamza.spring.myblog.payload.CommentResponse;
 import com.hamza.spring.myblog.service.CommentService;
 import com.hamza.spring.myblog.utils.AppConstant;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/comments")
 public class CommentController {
     CommentService commentService;
 
@@ -19,12 +20,12 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/{post_id}/comments")
-    ResponseEntity<Object> createComment(@PathVariable(name = "post_id") long postId, @RequestBody CommentDto commentDto) {
+    @PostMapping("/{post_id}")
+    ResponseEntity<Object> createComment(@PathVariable(name = "post_id") long postId,@Valid @RequestBody CommentDto commentDto) {
         return new ResponseEntity<>(commentService.createComment(postId, commentDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{post_id}/comments")
+    @GetMapping("/{post_id}")
     ResponseEntity<CommentResponse> getAllComments(@PathVariable(name = "post_id") long postId,
                                                    @RequestParam(name = "pageSize", defaultValue = AppConstant.DEFAULT_PAGE_SIZE, required = false) int pageSize,
                                                    @RequestParam(name = "pageNumber", defaultValue = AppConstant.DEFAULT_PAGE_NUMBER, required = false) int pageNumber,
@@ -33,18 +34,18 @@ public class CommentController {
         return new ResponseEntity<>(commentService.getAllCommentsByPostId(postId, pageSize, pageNumber, sortBy, sortDirection), HttpStatus.OK);
     }
 
-    @GetMapping("/comments/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<CommentDto> getCommentById(@PathVariable(name = "id") Long id) {
         return new ResponseEntity<>(commentService.getCommentById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/comments/{post_id}/{id}")
-    ResponseEntity<CommentDto> updateComment(@PathVariable(name = "post_id") Long postId, @PathVariable(name = "id") Long id, @RequestBody CommentDto commentDto) {
+    @PutMapping("/{post_id}/{id}")
+    ResponseEntity<CommentDto> updateComment(@PathVariable(name = "post_id") Long postId, @PathVariable(name = "id") Long id,@Valid @RequestBody CommentDto commentDto) {
         return new ResponseEntity<>(commentService.updateComment(postId, id, commentDto), HttpStatus.OK);
     }
 
 
-    @DeleteMapping("/comments/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<Object> deleteComment(@PathVariable(name = "id") Long id) {
         commentService.deleteComment(id);
         return new ResponseEntity<>("Comment with id " + id + " deleted successfully", HttpStatus.OK);
