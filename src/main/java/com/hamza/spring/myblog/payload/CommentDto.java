@@ -1,5 +1,6 @@
 package com.hamza.spring.myblog.payload;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -14,13 +15,13 @@ import java.util.Set;
 public class CommentDto {
     private Long id;
     @NotEmpty(message = "Content cannot be empty")
-    @Size(min = 10, max = 500, message = "Content must")
+    @Size(min = 2, max = 500, message = "Content must")
     private String name;
     @NotEmpty(message = "Content cannot be empty")
-    @Size(min = 10, max = 500, message = "Content must be between 10 and 500 characters long")
+    @Email
     private String email;
     @NotEmpty(message = "Content cannot be empty")
-    @Size(min = 10, max = 500, message = "Content must be between 10 and 500 characters long")
+    @Size(min = 2, max = 500, message = "Content must be between 10 and 500 characters long")
     private String body;
     private Set<CommentReplayDto> replies;
 }

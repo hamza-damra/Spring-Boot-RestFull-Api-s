@@ -28,4 +28,11 @@ public class CommentReplayController {
         commentReplayService.createCommentReplay(comment_id, commentReplayDto);
         return ResponseEntity.ok("Comment replay created successfully for comment with id: " + comment_id);
     }
+
+    @GetMapping("/{comment_id}")
+    public ResponseEntity<Iterable<CommentReplayDto>> getAllCommentReplays(@PathVariable Long comment_id) {
+        return ResponseEntity.ok(commentReplayService.getAllCommentReplays(comment_id));
+    }
+
+
 }

@@ -41,9 +41,13 @@ public class PostServiceImplementation implements PostService {
 
         // save post to database
         Post savedPost = postRepository.save(post);
+        PostDto postDtoResponse = mapToDto(savedPost);
 
+        if(savedPost.getComments() == null) {
+            postDtoResponse.setComments(new HashSet<>());
+        }
         // convert Post entity to PostDto and return it as response
-        return mapToDto(savedPost);
+        return postDtoResponse;
     }
 
     @Transactional

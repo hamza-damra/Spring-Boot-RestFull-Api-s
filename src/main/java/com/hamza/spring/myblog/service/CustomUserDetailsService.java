@@ -9,4 +9,6 @@ public interface CustomUserDetailsService extends UserDetailsService {
     UserDto createUser(UserDto userDto);
 
     List<UserDto> getAllUsers();
+
+    boolean authenticate(String username, String password);
 }

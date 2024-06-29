@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 public class CommentReplayServiceImplementation implements CommentReplayService  {
 
@@ -38,6 +40,13 @@ public class CommentReplayServiceImplementation implements CommentReplayService 
 
         // Add the reply to the comment's replies list
         comment.getReplies().add(commentReplay);
+    }
+
+    @Override
+    public Iterable<CommentReplayDto> getAllCommentReplays(Long commentId) {
+        // find all comments for the given comment
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment","id", commentId.toString()));
+        return comment.getReplies().stream().map(this::mapCommentToCommentReplayDto).collect(Collectors.toList());
     }
 
     private CommentReplayDto mapCommentToCommentReplayDto(CommentReplay commentReplay) {

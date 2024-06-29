@@ -37,6 +37,18 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
+    // make login function using username and password
+    @GetMapping("/login")
+    public ResponseEntity<Boolean> login(@RequestParam String username, @RequestParam String password){
+       boolean isAuthenticated =  userService.authenticate(username, password);
+        if(isAuthenticated){
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
 
 
 

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Setter
@@ -25,7 +26,9 @@ public class PostDto {
     @Size(min = 10, max = 500, message = "Description must be between 10 and 500 characters long")
     private String description;
     @NotEmpty(message = "Content cannot be empty")
-    @Size(min = 100, max = 10000, message = "Content must be between 100 and 10,000 characters long")
+    @Size(min = 5, max = 500, message = "Content must be between 5 and 500 characters long")
     private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private Set<CommentDto> comments;
 }

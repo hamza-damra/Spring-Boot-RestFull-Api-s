@@ -2,7 +2,6 @@ package com.hamza.spring.myblog.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,8 +18,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/**").permitAll()  // Allow access to registration endpoint
-                        .requestMatchers("/api/posts/**").hasRole("USER")  // Only allow users with ROLE_USER
+                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/posts/**").hasRole("USER")
+                        .requestMatchers("/api/roles/**").hasRole("ADMIN")
                         .requestMatchers("/api/comments/**", "/api/comment-replays/**").permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
