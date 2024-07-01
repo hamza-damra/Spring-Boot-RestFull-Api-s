@@ -1,4 +1,4 @@
-package com.hamza.spring.myblog.service;
+package com.hamza.spring.myblog.security;
 
 import com.hamza.spring.myblog.payload.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,6 +9,4 @@ public interface CustomUserDetailsService extends UserDetailsService {
     UserDto createUser(UserDto userDto);
 
     List<UserDto> getAllUsers();
-
-    boolean authenticate(String username, String password);
 }

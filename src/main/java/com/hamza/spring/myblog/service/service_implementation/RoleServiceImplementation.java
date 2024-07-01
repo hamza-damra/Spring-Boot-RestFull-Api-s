@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RoleServiceImplementation implements RoleService {
@@ -32,7 +34,7 @@ public class RoleServiceImplementation implements RoleService {
                 .orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
 
         // Update the role properties
-        existingRole.setName("ROLE_" + roleDto.getName().toUpperCase());
+        existingRole.setName(roleDto.getName().toUpperCase());
 
         Role updatedRole = roleRepository.save(existingRole);
         return modelMapper.map(updatedRole, RoleDto.class);
@@ -54,5 +56,10 @@ public class RoleServiceImplementation implements RoleService {
                 .orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
 
         return modelMapper.map(role, RoleDto.class);
+    }
+
+    @Override
+    public List<RoleDto> getAllRoles() {
+        return roleRepository.findAll().stream().map(role -> modelMapper.map(role, RoleDto.class)).toList();
     }
 }

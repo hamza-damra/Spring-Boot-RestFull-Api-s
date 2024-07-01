@@ -3,10 +3,13 @@ package com.hamza.spring.myblog.controller;
 import com.hamza.spring.myblog.payload.RoleDto;
 import com.hamza.spring.myblog.service.RoleService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")
@@ -38,4 +41,10 @@ public class RoleController {
         RoleDto roleDto = roleService.getRoleById(id);
         return new ResponseEntity<>(roleDto, HttpStatus.OK);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<RoleDto>> getAllRoles() {
+        return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
+    }
+
 }
