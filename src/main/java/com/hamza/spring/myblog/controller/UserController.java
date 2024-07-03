@@ -38,11 +38,19 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<CreateUserCustomResponse> createUser(@Valid @RequestBody UserDto userDto){
+    public ResponseEntity<JwtAuthResponseDto> createUser(@Valid @RequestBody UserDto userDto){
         logger.info("Registering user");
         UserDto createdUser = userService.createUser(userDto);
-        CreateUserCustomResponse response = new CreateUserCustomResponse("User created successfully", createdUser);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+        // Authenticate the newly created user
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword()));
+
+        // Generate token
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        // Return the token in the response body
+        return new ResponseEntity<>(new JwtAuthResponseDto(token), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

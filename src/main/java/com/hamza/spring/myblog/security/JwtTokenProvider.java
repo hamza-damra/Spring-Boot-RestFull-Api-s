@@ -1,10 +1,7 @@
 package com.hamza.spring.myblog.security;
 
 import com.hamza.spring.myblog.exception.BlogApiException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
@@ -29,8 +26,7 @@ public class JwtTokenProvider {
 
     @PostConstruct
     public void init() {
-        // Generate a secure key for the HS512 algorithm
-        this.key = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS512);
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
 
     // generate token
@@ -38,7 +34,6 @@ public class JwtTokenProvider {
         String userName = authentication.getName();
         Date currentDate = new Date();
         Date expirationDate = new Date(currentDate.getTime() + validityInMilliseconds);
-
         return Jwts.builder()
                 .setSubject(userName)
                 .setIssuedAt(currentDate)

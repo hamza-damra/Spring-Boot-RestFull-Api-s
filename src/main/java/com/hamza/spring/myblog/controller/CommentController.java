@@ -9,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequestMapping("/api/comments")
 public class CommentController {
     private final CommentService commentService;
+    private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
     @Autowired
     public CommentController(CommentService commentService) {
@@ -22,7 +26,9 @@ public class CommentController {
 
     @PostMapping("/{post_id}")
     ResponseEntity<Object> createComment(@PathVariable(name = "post_id") long postId, @Valid @RequestBody CommentDto commentDto) {
-        return new ResponseEntity<>(commentService.createComment(postId, commentDto), HttpStatus.CREATED);
+        CommentDto createdComment = commentService.createComment(postId, commentDto);
+        notifyClients(createdComment);
+        return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
     }
 
     @GetMapping("/post/{post_id}")
@@ -48,5 +54,24 @@ public class CommentController {
     ResponseEntity<Object> deleteComment(@PathVariable(name = "comment_id") Long commentId) {
         commentService.deleteComment(commentId);
         return new ResponseEntity<>("Comment with id " + commentId + " deleted successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/sse")
+    public SseEmitter streamComments() {
+        SseEmitter emitter = new SseEmitter();
+        emitters.add(emitter);
+        emitter.onCompletion(() -> emitters.remove(emitter));
+        emitter.onTimeout(() -> emitters.remove(emitter));
+        return emitter;
+    }
+
+    private void notifyClients(CommentDto commentDto) {
+        for (SseEmitter emitter : emitters) {
+            try {
+                emitter.send(SseEmitter.event().name("new-comment").data(commentDto));
+            } catch (Exception e) {
+                emitters.remove(emitter);
+            }
+        }
     }
 }
