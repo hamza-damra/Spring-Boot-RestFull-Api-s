@@ -37,9 +37,9 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers("/api/posts/**").permitAll()
+                        .requestMatchers("/api/posts/**").authenticated()
                         .requestMatchers("/api/roles/**").permitAll()
-                        .requestMatchers("/api/comments/**", "/api/comment-replays/**").permitAll())
+                        .requestMatchers("/api/comments/**", "/api/comment-replays/**").authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtAuthenticationFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class);
         return http.build();

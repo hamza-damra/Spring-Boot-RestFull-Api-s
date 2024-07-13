@@ -1,9 +1,8 @@
 package com.hamza.spring.myblog.controller;
 
 import com.hamza.spring.myblog.payload.RoleDto;
-import com.hamza.spring.myblog.service.RoleService;
+import com.hamza.spring.myblog.service.services.RoleService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

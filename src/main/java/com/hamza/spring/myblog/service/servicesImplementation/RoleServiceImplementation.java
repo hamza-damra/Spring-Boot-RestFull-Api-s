@@ -1,9 +1,9 @@
-package com.hamza.spring.myblog.service.service_implementation;
+package com.hamza.spring.myblog.service.servicesImplementation;
 
 import com.hamza.spring.myblog.entity.Role;
 import com.hamza.spring.myblog.payload.RoleDto;
 import com.hamza.spring.myblog.repository.RoleRepository;
-import com.hamza.spring.myblog.service.RoleService;
+import com.hamza.spring.myblog.service.services.RoleService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

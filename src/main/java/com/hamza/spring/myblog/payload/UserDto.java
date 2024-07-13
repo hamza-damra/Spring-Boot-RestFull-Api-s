@@ -1,6 +1,6 @@
 package com.hamza.spring.myblog.payload;
 
-import com.hamza.spring.myblog.validation.UniqueUsername;
+import com.hamza.spring.myblog.validation.annotations.UniqueUsername;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

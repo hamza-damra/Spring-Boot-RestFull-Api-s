@@ -1,4 +1,4 @@
-package com.hamza.spring.myblog.service.service_implementation;
+package com.hamza.spring.myblog.service.servicesImplementation;
 
 import com.hamza.spring.myblog.entity.Comment;
 import com.hamza.spring.myblog.entity.Post;
@@ -8,9 +8,8 @@ import com.hamza.spring.myblog.payload.CommentDto;
 import com.hamza.spring.myblog.payload.CommentResponse;
 import com.hamza.spring.myblog.repository.CommentRepository;
 import com.hamza.spring.myblog.repository.PostRepository;
-import com.hamza.spring.myblog.service.CommentService;
+import com.hamza.spring.myblog.service.services.CommentService;
 
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class CommentServiceImplementation implements CommentService {

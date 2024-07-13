@@ -1,6 +1,7 @@
-package com.hamza.spring.myblog.validation;
+package com.hamza.spring.myblog.validation.validators;
 
 import com.hamza.spring.myblog.repository.UserRepository;
+import com.hamza.spring.myblog.validation.annotations.UniqueUsername;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;

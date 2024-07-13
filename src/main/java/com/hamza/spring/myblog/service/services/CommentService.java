@@ -1,4 +1,4 @@
-package com.hamza.spring.myblog.service;
+package com.hamza.spring.myblog.service.services;
 
 
 import com.hamza.spring.myblog.payload.CommentDto;

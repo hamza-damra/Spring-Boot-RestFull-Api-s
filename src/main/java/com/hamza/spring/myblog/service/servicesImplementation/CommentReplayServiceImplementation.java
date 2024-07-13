@@ -1,13 +1,12 @@
-package com.hamza.spring.myblog.service.service_implementation;
+package com.hamza.spring.myblog.service.servicesImplementation;
 
 import com.hamza.spring.myblog.entity.Comment;
 import com.hamza.spring.myblog.entity.CommentReplay;
 import com.hamza.spring.myblog.exception.ResourceNotFoundException;
-import com.hamza.spring.myblog.payload.CommentDto;
 import com.hamza.spring.myblog.payload.CommentReplayDto;
 import com.hamza.spring.myblog.repository.CommentReplayRepository;
 import com.hamza.spring.myblog.repository.CommentRepository;
-import com.hamza.spring.myblog.service.CommentReplayService;
+import com.hamza.spring.myblog.service.services.CommentReplayService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

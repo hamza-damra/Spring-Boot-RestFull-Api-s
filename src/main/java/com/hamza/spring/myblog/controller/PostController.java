@@ -2,32 +2,33 @@ package com.hamza.spring.myblog.controller;
 
 import com.hamza.spring.myblog.payload.PostDto;
 import com.hamza.spring.myblog.payload.PostResponse;
-import com.hamza.spring.myblog.service.service_implementation.PostServiceImplementation;
+import com.hamza.spring.myblog.service.services.PostService;
 import com.hamza.spring.myblog.utils.AppConstant;
-import jakarta.validation.Valid;
+import com.hamza.spring.myblog.validation.markers.OnCreate;
+import com.hamza.spring.myblog.validation.markers.OnUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
 
-    private final PostServiceImplementation postService;
+    private final PostService postService;
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
     @Autowired
-    public PostController(PostServiceImplementation postService) {
+    public PostController(PostService postService) {
         this.postService = postService;
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
+    public ResponseEntity<PostDto> createPost(@Validated(OnCreate.class) @RequestBody PostDto postDto) {
         PostDto createdPost = postService.createPost(postDto);
         notifyClients(createdPost);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
@@ -47,15 +48,22 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostDto> updatePost(@PathVariable(name = "id") Long id, @Valid @RequestBody PostDto postDto) {
-        notifyClients(postDto);
-        return new ResponseEntity<>(postService.updatePost(id, postDto), HttpStatus.OK);
+    public ResponseEntity<PostDto> updatePost(@PathVariable(name = "id") Long id, @Validated(OnUpdate.class) @RequestBody PostDto postDto) {
+        PostDto updatedPost = postService.updatePost(id, postDto);
+        notifyClients(updatedPost);
+        return new ResponseEntity<>(updatedPost, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletePost(@PathVariable(name = "id") Long id) {
         postService.deletePost(id);
         return new ResponseEntity<>("Post with id " + id + " deleted successfully", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/all")
+    public ResponseEntity<Object> deleteAllPosts() {
+        String message = postService.deleteAllPosts();
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping("/sse")

@@ -39,7 +39,7 @@ public class CustomUserDetailsServiceImplementation implements UserDetailsServic
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Authenticating user: {}", username);
         Optional<User> user = userRepository.findByUsername(username);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             log.error("User not found with username: {}", username);
             throw new UsernameNotFoundException("User not found with username: " + username);
         }

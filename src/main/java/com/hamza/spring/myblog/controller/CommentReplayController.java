@@ -1,7 +1,7 @@
 package com.hamza.spring.myblog.controller;
 
 import com.hamza.spring.myblog.payload.CommentReplayDto;
-import com.hamza.spring.myblog.service.CommentReplayService;
+import com.hamza.spring.myblog.service.services.CommentReplayService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

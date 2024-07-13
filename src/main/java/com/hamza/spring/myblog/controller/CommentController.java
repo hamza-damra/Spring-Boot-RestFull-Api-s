@@ -2,7 +2,7 @@ package com.hamza.spring.myblog.controller;
 
 import com.hamza.spring.myblog.payload.CommentDto;
 import com.hamza.spring.myblog.payload.CommentResponse;
-import com.hamza.spring.myblog.service.CommentService;
+import com.hamza.spring.myblog.service.services.CommentService;
 import com.hamza.spring.myblog.utils.AppConstant;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
