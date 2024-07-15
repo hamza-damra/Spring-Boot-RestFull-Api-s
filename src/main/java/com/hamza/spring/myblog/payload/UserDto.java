@@ -19,16 +19,16 @@ public class UserDto {
     private Long id;
 
     @NotEmpty(message = "Username is required")
-    @Size(min = 3, max = 50, message = "Username must be between 5 and 50 characters long")
+    @Size(min = 3, max = 30, message = "Username must be between 5 and 50 characters long")
     @UniqueUsername
     private String username;
 
     @NotEmpty(message = "Password is required")
-    @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters long")
+    @Size(min = 8, max = 30, message = "Password must be between 6 and 100 characters long")
     private String password;
 
     @NotEmpty(message = "Name is required")
-    @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters long")
+    @Size(min = 3, max = 20, message = "Name must be between 3 and 100 characters long")
     private String name;
 
     @NotEmpty(message = "At least one role is required")
