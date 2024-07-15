@@ -61,7 +61,7 @@ public class PostController {
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<Object> deleteAllPosts() {
+    public ResponseEntity<String> deleteAllPosts() {
         String message = postService.deleteAllPosts();
         return new ResponseEntity<>(message, HttpStatus.OK);
     }

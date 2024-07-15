@@ -39,15 +39,8 @@ public class Post {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Comment> comments = new HashSet<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Image> images = new HashSet<>();
-
-    public void addImage(Image image) {
-        images.add(image);
-        image.setPost(this);
-    }
-
-    public void removeImage(Image image) {
-        images.remove(image);
-        image.setPost(null);
-    }
 }

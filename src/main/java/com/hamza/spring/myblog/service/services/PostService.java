@@ -14,9 +14,13 @@ public interface PostService {
 
     PostDto getPostById(Long id);
 
-    PostDto updatePost(Long id,@Validated PostDto postDto);
+    PostDto updatePost(Long id, @Validated PostDto postDto);
 
     void deletePost(Long id);
 
     String deleteAllPosts();
+
+    void addImageToPost(Long postId, Long imageId);
+
+    void removeImageFromPost(Long postId, Long imageId);
 }

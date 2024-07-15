@@ -14,10 +14,8 @@ public class UniqueTitleValidator implements ConstraintValidator<UniqueTitle, St
     @Override
     public boolean isValid(String title, ConstraintValidatorContext context) {
         if (title == null) {
-            return true; // Consider null as valid, since it's handled by @NotEmpty
+            return true;
         }
-
-        // If creating, check if the title already exists
         return !postRepository.existsByTitle(title);
     }
 }

@@ -6,6 +6,7 @@ import com.hamza.spring.myblog.exception.ResourceNotFoundException;
 import com.hamza.spring.myblog.payload.ImageDto;
 import com.hamza.spring.myblog.payload.PostDto;
 import com.hamza.spring.myblog.payload.PostResponse;
+import com.hamza.spring.myblog.repository.ImageRepository;
 import com.hamza.spring.myblog.repository.PostRepository;
 import com.hamza.spring.myblog.service.services.PostService;
 import com.hamza.spring.myblog.validation.markers.OnCreate;
@@ -28,18 +29,20 @@ import java.util.stream.Collectors;
 
 @Service
 @Validated
+@Transactional
 public class PostServiceImplementation implements PostService {
 
     private final PostRepository postRepository;
+    private final ImageRepository imageRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public PostServiceImplementation(PostRepository postRepository, ModelMapper modelMapper, Validator validator) {
+    public PostServiceImplementation(PostRepository postRepository, ImageRepository imageRepository, ModelMapper modelMapper, Validator validator) {
         this.postRepository = postRepository;
+        this.imageRepository = imageRepository;
         this.modelMapper = modelMapper;
     }
 
-    @Transactional
     @Override
     public PostDto createPost(@Validated(OnCreate.class) PostDto postDto) {
         Post post = convertToEntity(postDto);
@@ -47,7 +50,6 @@ public class PostServiceImplementation implements PostService {
         return mapToDto(savedPost);
     }
 
-    @Transactional
     @Override
     public PostResponse getAllPosts(int pageSize, int pageNumber, String sortBy, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
@@ -62,7 +64,6 @@ public class PostServiceImplementation implements PostService {
         return mapToDto(postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("post", "id", String.valueOf(id))));
     }
 
-    @Transactional
     @Override
     public PostDto updatePost(Long id, @Validated(OnUpdate.class) PostDto postDto) {
         Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("post", "id", String.valueOf(id)));
@@ -90,6 +91,24 @@ public class PostServiceImplementation implements PostService {
         }
     }
 
+    @Override
+    public void addImageToPost(Long postId, Long imageId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", String.valueOf(postId)));
+        Image image = imageRepository.findById(imageId).orElseThrow(() -> new ResourceNotFoundException("Image", "id", String.valueOf(imageId)));
+        post.getImages().add(image);
+        image.setPost(post);
+        postRepository.save(post);
+    }
+
+    @Override
+    public void removeImageFromPost(Long postId, Long imageId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", String.valueOf(postId)));
+        Image image = imageRepository.findById(imageId).orElseThrow(() -> new ResourceNotFoundException("Image", "id", String.valueOf(imageId)));
+        post.getImages().remove(image);
+        image.setPost(null);
+        postRepository.save(post);
+    }
+
     private PostDto mapToDto(Post post) {
         PostDto postDto = modelMapper.map(post, PostDto.class);
         Set<ImageDto> imageUrls = post.getImages().stream().map(image -> new ImageDto(image.getUrl())).collect(Collectors.toSet());
@@ -100,12 +119,14 @@ public class PostServiceImplementation implements PostService {
     private Post convertToEntity(PostDto postDto) {
         Post post = modelMapper.map(postDto, Post.class);
         if (postDto.getImageUrls() != null) {
+
             Set<Image> images = postDto.getImageUrls().stream().map(imageDto -> {
                 Image image = new Image();
                 image.setUrl(imageDto.getUrl());
                 image.setPost(post);
                 return image;
             }).collect(Collectors.toSet());
+
             post.setImages(images);
         }
         return post;
@@ -124,11 +145,9 @@ public class PostServiceImplementation implements PostService {
                 return image;
             }).collect(Collectors.toSet());
 
-            // Synchronize access to the post's images collection
             synchronized (post.getImages()) {
-                Set<Image> currentImages = new HashSet<>(post.getImages());
-                currentImages.forEach(post::removeImage);
-                newImages.forEach(post::addImage);
+                post.getImages().clear();
+                post.getImages().addAll(newImages);
             }
         }
     }

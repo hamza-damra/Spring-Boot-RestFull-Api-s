@@ -10,5 +10,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImageDto {
+    private Long id;
     private String url;
+
+    public ImageDto(String url) {
+        this.url = url;
+    }
 }
